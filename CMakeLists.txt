@@ -14,6 +14,15 @@ set(CEF_VERSION "120.2.7+g4bc6a59+chromium-120.0.6099.234")
 # Determine the platform
 if(NOT DEFINED CEF_PLATFORM)
   if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+
+    if(NOT DEFINED PROJECT_ARCH)
+      message(STATUS "PROJECT_ARCH is not defined")
+      if(DEFINED ENV{PROJECT_ARCH})
+        message(STATUS "ENV 'PROJECT_ARCH' is defined")
+        set(PROJECT_ARCH $ENV{PROJECT_ARCH})
+      endif()
+    endif()
+
     if("${PROJECT_ARCH}" STREQUAL "arm64")
       set(CEF_PLATFORM "macosarm64")
     else()
@@ -33,6 +42,10 @@ if(NOT DEFINED CEF_PLATFORM)
     endif()
   endif()
 endif()
+
+message(STATUS "CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
+message(STATUS "PROJECT_ARCH = ${PROJECT_ARCH}")
+message(STATUS "CEF_PLATFORM = ${CEF_PLATFORM}")
 
 # Add this project's cmake/ directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/app/cmake/cef")
